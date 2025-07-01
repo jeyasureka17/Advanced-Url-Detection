@@ -1,63 +1,77 @@
-🔐 Advanced URL Detector with Hybrid Analysis
-This project implements a professional, full-featured desktop application to detect malicious URLs using a hybrid analysis engine. It provides a secure environment for users with a complete authentication system.
-The system evaluates URLs based on a multi-layered approach, combining a machine learning model, a rule-based engine, and external API verification to provide a comprehensive and reliable security assessment.
+# 🔐 Advanced URL Detector with Hybrid Analysis
 
-💡 Project Overview
-The primary goal is to create a robust tool that can accurately classify URLs as SAFE, POTENTIAL RISK, or MALICIOUS. The system is designed with a professional user experience in mind, from secure login to a clear and informative analysis breakdown.
-User Authentication System – A secure system for user registration, login, and password management, featuring an email-based "Forgot Password" flow.
-Hybrid URL Analysis – A powerful engine that combines three methods:
-Machine Learning: A Random Forest model analyzes lexical features.
-Rule-Based Heuristics: A scoring system checks for common phishing and malware indicators (e.g., domain age, suspicious keywords).
-External Verification: The VirusTotal API provides a community-backed security score.
-Efficient Caching System - A local database cache for VirusTotal results dramatically reduces API calls and improves performance for previously scanned URLs.
+This project is a professional-grade desktop application that detects malicious URLs using a hybrid analysis engine. It is designed with user security and accuracy in mind, offering a secure login system, smart caching, and intelligent threat detection based on machine learning, heuristic rules, and external threat intelligence APIs.
 
-🛠️ Technologies Used
-Backend & Logic: Python
-GUI Framework: Tkinter
-Machine Learning: Scikit-learn, Pandas, Joblib
-Database: SQLite3 for user data and history caching
-Web & Network: Requests, Whois, BeautifulSoup4
-Authentication & Security: Hashlib, SMTPlib, python-dotenv
+The application enables users to check the safety of URLs and classify them into three categories: **SAFE**, **POTENTIAL RISK**, or **MALICIOUS**. It provides clear verdicts, historical scanning records, and robust performance for everyday and professional use.
 
-📁 Project Structure
-File/Folder	Description
-main_app.py	The main Tkinter application, handling all UI frames and user interaction.
-url_analyzer.py	Contains the core logic for the hybrid analysis engine.
-train.py	Script to train the Random Forest machine learning model.
-database_setup.py	Initializes the SQLite database and tables on first run.
-config.py	Securely loads API keys and secrets from the .env file.
-.env	(Local Only) Stores secret credentials. Not uploaded to GitHub.
-.gitignore	Ensures that secret files and caches are not committed to Git.
-data/	Contains the url_data_full.csv dataset for training the model.
+---
 
-🔍 How It Works
-User Authentication: A user signs up or logs in. Passwords are securely stored as a SHA-256 hash. The "Forgot Password" feature uses an App Password to send a secure reset code via email.
-URL Submission: The user enters a URL for analysis.
-Cache Check: The system first checks its local database to see if the URL has been scanned recently. If a valid cached result exists, it is returned immediately to save time and API calls.
-Hybrid Analysis: If no cached result is found:
-The Rule-Based Engine analyzes host and lexical features, assigning a risk score.
-The Machine Learning Model predicts the probability of maliciousness based on lexical features.
-An API call is made to VirusTotal for an external community score.
-Verdict Calculation: The scores from all three sources are combined to produce a final, reliable verdict: SAFE, POTENTIAL RISK, or MALICIOUS.
-History & Caching: The result is displayed to the user and saved to the database for future reference and caching.
+The system uses a multi-layered detection approach:
 
-🧠 Model Performance
-Module	Model	Accuracy
-URL Detection	Random Forest	~99%
-Accuracy based on the validation set after training on the url_data_full.csv dataset. The model excels at identifying patterns in URL structure.
+- **Machine Learning (Random Forest)** trained on URL lexical features using the `url_data_full.csv` dataset.
+- **Rule-Based Heuristics**, including domain age checks, suspicious keywords, and abnormal patterns.
+- **External API Integration** with **VirusTotal** to verify against community and vendor reports.
 
-🚀 How to Run
-Install Dependencies:
-pip install pandas scikit-learn joblib Pillow whois requests beautifulsoup4 python-dote
-Configure Secrets:
-Create a file named .env in the project root.
-Add your credentials to it:
-SENDER_EMAIL="your-email@gmail.com"
-SENDER_PASSWORD="your-16-character-app-password"
-VIRUSTOTAL_API_KEY="your-virustotal-api-key"
-Setup Database (Run once):
-python database_setup.py
-Train Model (Run once):
-python train.py
-Launch the Application:
-python main_app.py
+A **local SQLite3 database cache** is used to store past results for 24 hours to reduce repeated scans and API calls.
+
+---
+
+### Key Features
+
+- ✅ URL Classification: Accurately flags safe or suspicious URLs
+- 🔐 Secure Authentication System: Includes user registration, login, and password reset via email
+- 🧠 Hybrid Analysis Engine: Combines ML prediction, heuristic scoring, and VirusTotal validation
+- 💾 Smart Caching: Avoids repeated API calls by saving recent scan data
+- 🖥️ GUI Application: Built with Python’s Tkinter for a native desktop experience
+
+---
+
+### Technologies Used
+
+- **Python (Backend & Logic)**
+- **Tkinter (GUI Framework)**
+- **Scikit-learn, Pandas, Joblib (Machine Learning)**
+- **SQLite3 (Local Database for users and cache)**
+- **Requests, Whois, BeautifulSoup4 (Web tools)**
+- **Hashlib, SMTPlib, python-dotenv (Security & Email Reset)**
+
+---
+
+### How It Works
+
+Users can log in or register to securely use the tool. Upon entering a URL:
+
+1. The system checks if the URL has been scanned in the last 24 hours.
+2. If not cached:
+   - Heuristic rules analyze the structure and content of the URL.
+   - The trained machine learning model predicts if the URL is malicious.
+   - An external call to the VirusTotal API gathers threat intelligence.
+3. The system combines all three assessments to generate a final verdict.
+4. The result is saved to the local cache and displayed in the GUI.
+
+The password reset feature uses an email-based OTP system powered by Gmail (App Passwords) to ensure account recovery is secure.
+
+---
+
+### Model Performance
+
+- **Random Forest Classifier**
+- **Achieved ~99% Accuracy** on the validation set
+- Features include domain length, presence of IP address, special characters, suspicious tokens, etc.
+
+---
+
+### Project Files Overview
+
+- `main_app.py` – Launches the Tkinter interface and handles user flow
+- `url_analyzer.py` – Contains the core URL detection logic
+- `train.py` – Trains and saves the ML model
+- `database_setup.py` – Creates necessary tables and schema
+- `config.py` – Loads environment secrets for API/email securely
+- `data/url_data_full.csv` – Training dataset
+- `.env` – Stores sensitive credentials (not tracked by Git)
+- `.gitignore` – Prevents secrets and cache files from being pushed
+
+---
+
+This application is suitable for educational, professional, and enterprise scenarios where reliable URL scanning is critical. The combination of local intelligence and external validation makes it fast, safe, and highly accurate.
